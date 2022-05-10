@@ -13,7 +13,7 @@
 
 *Friday*:  
 Morning (Last fixes in case any)  
-Afternoon (Last rehearsal for preparation)  
+Afternoon (Last rehearsal for presentation)  
 
 
 
