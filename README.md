@@ -28,7 +28,7 @@ Correlations between features and relation between features and target
 Prepare final plots for presentation  
 
 
-*Preprocessing* (Theo)  
+*PREPROCESSING* (Theo)  
 Cleaning data (any column/row to drop)  
 Missing value imputation  
 Create functions and pipelines to easily run experimentations  
