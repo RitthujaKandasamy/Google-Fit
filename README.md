@@ -21,15 +21,15 @@ Afternoon (Last rehearsal for preparation)
 *EDA* (Ritthu)  
 Using Graphext explore the followings:  
 
-Missing values (how many in each column in %)  
-Distribution of features (histogram + kde)   
-Is target balanced?  
-Correlations between features and relation between features and target  
-Prepare final plots for presentation  
+* Missing values (how many in each column in %)  
+* Distribution of features (histogram + kde)   
+* Is target balanced?  
+* Correlations between features and relation between features and target  
+* Prepare final plots for presentation  
 
 
 *PREPROCESSING* (Theo)  
-Cleaning data (any column/row to drop)  
-Missing value imputation  
-Create functions and pipelines to easily run experimentations  
-Try out first chosen models  
+* Cleaning data (any column/row to drop)  
+* Missing value imputation  
+* Create functions and pipelines to easily run experimentations  
+* Try out first chosen models  
