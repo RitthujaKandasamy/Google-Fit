@@ -37,8 +37,8 @@ Using Graphext explore the followings:
 
 
 
-## Plan Wednesday:
-*Model* (Theo):
+## Wednesday's Plan:
+*MODEL* (Theo)
 
 * Recheck model(prepreocessing, split, pipeline,...)[after kickoff to 11:00]
 * Check with different model.[11:30 to 15:00]
@@ -46,7 +46,7 @@ Using Graphext explore the followings:
 * Increase accuracy(with hyperparameter, data enhancement).[15:15 to 16:00]
 * Finalize[17:00 to 18:00]
 
-*Streamlit* (Ritthu):
+*STREAMLIT* (Ritthu)
    
 * Plan what features to add in it.[after kickoff to 11:00]
 * Plan how it should look like.[11:30 to 13:00]
