@@ -12,8 +12,8 @@
 *Thursday*: Finish the App and prepare final presentation.  
 
 *Friday*:  
-Morning (Last fixes in case any)  
-Afternoon (Last rehearsal for presentation)  
+* Morning: (Last fixes in case any)  
+* Afternoon: (Last rehearsal for presentation)  
 
 
 
