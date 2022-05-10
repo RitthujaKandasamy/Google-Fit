@@ -2,10 +2,13 @@
 
 ## Week Plan:    
 *Monday*: Understanding the data, how it has been collected and preprocessed. Create Metadata about sensors’ outputs.  
+
 *Tuesday*: EDA  and Preprocessing. Selection of final model.  
+
 *Wednesday*:   
 * Before noon: Tuning the model (hyperparamater tuning, data enhancement).  
-* Afternoon: Design the App(what features to add, how it should look like) + first version of the App (we use streamlit)    
+* Afternoon: Design the App(what features to add, how it should look like) + first version of the App (we use streamlit)  
+* 
 *Thursday*: Finish the App and prepare final presentation.  
 
 *Friday*:  
