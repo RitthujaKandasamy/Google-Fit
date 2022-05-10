@@ -12,8 +12,8 @@
 *Thursday*: Finish the App and prepare final presentation.  
 
 *Friday*:  
-Morning (Last fixes in case any)  
-Afternoon (Last rehearsal for presentation)  
+* Morning: (Last fixes in case any)  
+* Afternoon: (Last rehearsal for presentation)  
 
 
 
@@ -33,3 +33,24 @@ Using Graphext explore the followings:
 * Missing value imputation  
 * Create functions and pipelines to easily run experimentations  
 * Try out first chosen models  
+
+
+
+
+## Wednesday's Plan:
+*MODEL* (Theo)
+
+* Recheck model(prepreocessing, split, pipeline,...)[after kickoff to 11:00]
+* Check with different model.[11:30 to 15:00]
+* Finalise model.[11:30 to 15:00]
+* Increase accuracy(with hyperparameter, data enhancement).[15:15 to 16:00]
+* Finalize[17:00 to 18:00]
+
+*STREAMLIT* (Ritthu)
+   
+* Plan what features to add in it.[after kickoff to 11:00]
+* Plan how it should look like.[11:30 to 13:00]
+* Create first page of the streamlit.[13:00 to 16:00]
+* Finalize[17:00 to 18:00]
+
+
