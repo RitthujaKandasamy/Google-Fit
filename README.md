@@ -8,7 +8,7 @@
 *Wednesday*:   
 * Before noon: Tuning the model (hyperparamater tuning, data enhancement).  
 * Afternoon: Design the App(what features to add, how it should look like) + first version of the App (we use streamlit)  
-* 
+
 *Thursday*: Finish the App and prepare final presentation.  
 
 *Friday*:  
@@ -18,7 +18,7 @@ Afternoon (Last rehearsal for preparation)
 
 
 ## Today's Plan (Tuesday)  
-* EDA (Ritthu)  
+*EDA* (Ritthu)  
 Using Graphext explore the followings:  
 
 Missing values (how many in each column in %)  
@@ -28,7 +28,7 @@ Correlations between features and relation between features and target
 Prepare final plots for presentation  
 
 
-* Preprocessing (Theo)  
+*Preprocessing* (Theo)  
 Cleaning data (any column/row to drop)  
 Missing value imputation  
 Create functions and pipelines to easily run experimentations  
