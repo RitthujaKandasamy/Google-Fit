@@ -1,5 +1,11 @@
 # Dependencies
+from sklearn.utils._testing import ignore_warnings
+from sklearn.exceptions import ConvergenceWarning
+
 import matplotlib.pyplot as plt
+import pandas as pd
+import numpy as np
+import time
 
 from sklearn.pipeline import Pipeline
 from sklearn.experimental import enable_iterative_imputer
@@ -11,6 +17,7 @@ from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay
 from sklearn.model_selection import cross_val_score
 
 
+# Select columns
 def select_columns(dataset, columns_to_keep):
     """Filters columns of `dataset` to keep only those specified by the `columns_to_keep` paramater
 
@@ -27,6 +34,7 @@ def select_columns(dataset, columns_to_keep):
     return dataset.loc[:, column_filter]
 
 
+# drop column(s) based on missing value percentage
 def drop_col_percent_na(dataset, threshold):
     """Drop columns missing value greater than `threshold`
 
@@ -42,6 +50,46 @@ def drop_col_percent_na(dataset, threshold):
     return dataset.loc[:, ~to_drop]
 
 
+# Split train test sets
+def split_train_test(data, upper_boundary=1, lower_boundary=3, nb_users_test=3):
+    """Split `data` into train and test sets based on users. Users with highest number of
+    records as well as very few numbers of records are excluded from being choosen for the test set.
+
+    Args:
+        data (Pandas DataFrame): Dataset to split
+        upper_boundary (int, optional): Controls k-number of users with high number of records to exclude. Defaults to 1.
+        lower_boundary (int, optional): Controls k-number of users with low number of records to exclude. Defaults to 3.
+        nb_users_test (int, optional): Number of users to include in the test set. Defaults to 3.
+
+    Returns:
+        Tuple(Pandas DataFrame, Pandas DataFrame): Both train and test sets
+    """
+    np.random.seed(0)
+
+    # number of records per user (sorted from highest to lowest)
+    user_dist = data.user.value_counts()
+
+    # array of users from which to choose the ones going into test set
+    to_choose_from = user_dist[upper_boundary: len(
+        user_dist) - lower_boundary].index
+
+    # users in test set
+    test_users = np.random.choice(to_choose_from, nb_users_test, replace=False)
+
+    # splitting into train and test sets
+    train = pd.DataFrame()
+    test = pd.DataFrame()
+    for _, row in data.iterrows():
+        if row["user"] in test_users:
+            test = pd.concat([test, row], axis=1)
+
+        else:
+            train = pd.concat([train, row], axis=1)
+
+    return train.T, test.T
+
+
+# Preprocessing + model pipeline
 def pipelines(models):
     """Create pipelines made up preprocessors(Imputer, StandardScaler) and models
 
@@ -64,3 +112,45 @@ def pipelines(models):
     ]) for name, model in models.items()}
 
     return pipes
+
+
+# Model performance
+@ignore_warnings(category=ConvergenceWarning)
+def perfomance(pipes, X_train, y_train, X_test, y_test):
+    """Compute mean and std of cross validation scores, accuracy on test set
+       as well as training and predicting time
+
+    Args: pipes(dict); as defined in `pipelines` function.
+          X_train, y_train; training sets
+          X_test, y_test; test sets
+
+    Returns:
+        Pandas Dataframe: Dataframe of computed performance metrics sorted by accuracy on test set
+    """
+    results = pd.DataFrame()
+
+    for name, model in pipes.items():
+
+        # training time
+        t0 = time.time()
+        model.fit(X_train, y_train)
+        train_time = time.time() - t0
+
+        # predicting time
+        t0 = time.time()
+        preds = model.predict(X_test)
+        pred_time = time.time() - t0
+
+        # cross validation
+        scores = cross_val_score(model, X_train, y_train)
+
+        # append to results
+        results = pd.concat([results, pd.DataFrame({'name': [name],
+                                                    'mean_score': [scores.mean()],
+                                                    'std_score':[scores.std()],
+                                                    'test_accuracy': [accuracy_score(y_test, preds)],
+                                                    'training_time': [train_time],
+                                                    'predicting_time': [pred_time]})
+                             ])
+
+    return results.sort_values(by='test_accuracy', ascending=False)
