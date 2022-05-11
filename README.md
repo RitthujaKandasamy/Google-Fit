@@ -40,11 +40,12 @@ Using Graphext explore the followings:
 ## Wednesday's Plan:
 *MODEL* (Theo)
 
-* Recheck model(prepreocessing, split, pipeline,...)[after kickoff to 11:00]
-* Check with different model.[11:30 to 15:00]
-* Finalise model.[11:30 to 15:00]
-* Increase accuracy(with hyperparameter, data enhancement).[15:15 to 16:00]
-* Finalize[17:00 to 18:00]
+* Final model selection [after kickoff to 11:00]
+* See if any performance increase with data enhancement [11:00 to 13:00]
+* Break [13:00 - 13:30]
+* Hyperparamater tuning [13:30 - 14:30]
+* Work on second version of the model that can works on most of the devices (fewer and common sensor data) without losing too much accuracy [14:30 - 16:30]
+* Start working on second page of the App [16:30 - 18:00]
 
 *STREAMLIT* (Ritthu)
    
@@ -53,4 +54,6 @@ Using Graphext explore the followings:
 * Create first page of the streamlit.[13:00 to 16:00]
 * Finalize[17:00 to 18:00]
 
+*PRESENTATION* (Andrea)
+* Create the presentation with PowerPoint[from 13.00 to 16:00]
 
