@@ -54,4 +54,6 @@ Using Graphext explore the followings:
 * Create first page of the streamlit.[13:00 to 16:00]
 * Finalize[17:00 to 18:00]
 
+*PRESENTATION* (Andrea)
+* Create the presentation with PowerPoint[from 13.00 to 16:00]
 
