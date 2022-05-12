@@ -1,12 +1,10 @@
-from tkinter import font
-from turtle import right
 import streamlit as st
 import pandas as pd
 from streamlit_option_menu import option_menu
 from streamlit_lottie import st_lottie
 import requests
 import sqlite3
-
+import streamlit.components.v1 as stc
 
 
 
@@ -26,6 +24,19 @@ import sqlite3
 
 
 
+
+def log():
+    
+     option = st.sidebar.selectbox(
+     'How would you like to be contacted?',
+     ('Email', 'Home phone', 'Mobile phone'))
+     if option == "Email":
+         st.write("love")
+     return option
+
+
+
+
 # DB Management, to store data
 conn = sqlite3.connect('data.db')
 info_data = conn.cursor()
@@ -35,8 +46,8 @@ def create_usertable():
     info_data.execute('CREATE TABLE IF NOT EXISTS userstable(username TEXT, password TEXT)')
 
 def add_userdata(username, password):
-   info_data.execute('INSERT INTO userstable(username, password) VALUES(?,?)', (username,password))
-   conn.commit()
+    info_data.execute('INSERT INTO userstable(username, password) VALUES(?,?)', (username,password))
+conn.commit()
 
 def login_user(username,password):
     info_data.execute('SELECT * FROM userstable WHERE username = ? AND password = ?', (username,password))
@@ -62,9 +73,9 @@ def load_lottieurl(url: str):
 
 with st.sidebar:
 
-     lottie_url = "https://assets3.lottiefiles.com/packages/lf20_sfpilpqw.json"
-     lottie_json = load_lottieurl(lottie_url)
-     st_lottie(lottie_json)
+    lottie_url = "https://assets3.lottiefiles.com/packages/lf20_sfpilpqw.json"
+    lottie_json = load_lottieurl(lottie_url)
+    st_lottie(lottie_json)
 
 
 
@@ -86,14 +97,14 @@ lottie_signup = load_lottieurl("https://assets5.lottiefiles.com/packages/lf20_q5
 # Menu
 with st.sidebar:
     
-    app_mode = option_menu(None, ["Home", "Sign in", "Create an account"],
-                        icons=['house', 'person-circle', 'person-plus'],
+    app_mode = option_menu(None, ["Home", "Sign in", "Create an account","LoggedIn","Logout"],
+                        icons=['house', 'person-circle', 'person-plus', 'logout'],
                         menu_icon="app-indicator", default_index=0,
                         styles={
         "container": {"padding": "5!important", "background-color": "#f0f2f6"},
         "icon": {"color": "orange", "font-size": "28px"}, 
         "nav-link": {"font-size": "16px", "text-align": "left", "margin":"0px", "--hover-color": "#eee"},
-        "nav-link-selected": {"background-color": "#2C3845"},
+        "nav-link-selected": {"background-color": "#2C3845"}
     }
     )
 
@@ -103,7 +114,7 @@ with st.sidebar:
 
 # Home page
 if app_mode == 'Home':
-    st.title('Model for Fitness Software using TMD dataset')
+    st.title('**Model for Fitness Software using TMD dataset**')
     st.image("Downloads\\fit.jpg", use_column_width = True)
     
     # it use to read and upload the file
@@ -120,30 +131,36 @@ if app_mode == 'Home':
 
 # Sign in
 elif app_mode == 'Sign in':
-    st.title("Run for your Life")
-    st.write("---")
+    
+
+    # title
+    HTML_BANNER = """
+    <div style="background-color:#464e5f;padding:10px;border-radius:10px">
+    <h1 style="color:white;text-align:center;">Welcome back 👋 </h1>
+    </div>
+    """
+    stc.html(HTML_BANNER)
 
     left_column, right_column = st.columns(2)               # to get two columns
 
     with right_column:
-        st.subheader("Login")
+        st.subheader("Log in to your account")
         username = st.text_input("User Name")
         password = st.text_input("Password", type="password")
 
         if st.button("Login"):
             create_usertable()
             result = login_user(username, password)
-            
+            LoggedIn = log()
             if result:
-               st.success("You have loged successfully")
-
+                st.success("You have logged in successfully") 
+                st.session_state = LoggedIn
             else:
                 st.warning("Incorrect Username/Password")
-        #st.warning("Please enter your username and password")
-    
-
+    st.warning("Please enter your username and password")
+        
     with left_column:
-         st_lottie(lottie_signin, height=300, key="coding")
+        st_lottie(lottie_signin, height=300, key="coding")
 
 
 
@@ -153,10 +170,18 @@ elif app_mode == 'Sign in':
 
 # create an account
 elif app_mode == 'Create an account':
-    st.title("Run for your Life")
-    st.write("---")
+    
+    HTML_BANNER = """
+    <div style="background-color:#464e5f;padding:10px;border-radius:10px">
+    <h1 style="color:white;text-align:center;">Google Fit </h1>
+    </div>
+    """
+    stc.html(HTML_BANNER)
 
     left_column, right_column = st.columns(2)               # to get two columns
+
+    with left_column:
+        st_lottie(lottie_signup, height=300, key="coding")
 
     with right_column:
         st.subheader("Create New Account")
@@ -166,14 +191,9 @@ elif app_mode == 'Create an account':
         if st.button("Signup"):
             create_usertable()
             result1 = add_userdata(new_username, new_password)
+            
 
     st.warning("Please enter your username and password")
 
-
-    with left_column:
-         st_lottie(lottie_signup, height=300, key="coding")
-
-
-    
 
 
