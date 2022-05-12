@@ -57,3 +57,12 @@ Using Graphext explore the followings:
 *PRESENTATION* (Andrea)
 * Create the presentation with PowerPoint[from 13.00 to 16:00]
 
+
+## Thursday's Plan:
+*Theo*
+* Last attempt to increase accuracy for all activities classification [after kickoff-12:00]
+* If it doesn't work, switch to a simplified version of modeling the target [12:00 - 13:00]
+* Break [13:00 - 13:30]
+* Hyperparameter tuning [13:30 - 14:30]
+* Integrate the model to the App [14:30 - 16:30]
+* Any additional feature Ritthuja will want me to work on [16:30 - 18:00]
