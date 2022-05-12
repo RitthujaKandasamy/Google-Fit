@@ -66,3 +66,10 @@ Using Graphext explore the followings:
 * Hyperparameter tuning [13:30 - 14:30]
 * Integrate the model to the App [14:30 - 16:30]
 * Any additional feature Ritthuja will want me to work on [16:30 - 18:00]
+
+*Andrea*
+* Team recap [after kickoff-10:45]
+* Try to use data enhancement to increase accuracy [11.00-13:30]
+* Lunch break [13.30-14:00]
+* Focus on the streamlit app [14.00-16:00]
+
