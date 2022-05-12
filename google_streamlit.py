@@ -326,7 +326,7 @@ elif app_mode == 'Sign in':
 
 
 # create an account
-elif app_mode == 'Create an account':
+elif app_mode == 'Create an Account':
     
     HTML_BANNER = """
     <div style="background-color:#464e5f;padding:10px;border-radius:10px">
@@ -341,7 +341,7 @@ elif app_mode == 'Create an account':
         st_lottie(lottie_signup, height=300, key="coding")
 
     with right_column:
-        st.subheader("Create new Account")
+        st.subheader("Create an Account")
         new_username = st.text_input("Username")
         new_password = st.text_input("Password", type="password")
 
@@ -352,7 +352,7 @@ elif app_mode == 'Create an account':
             if result1:
                 st.success("You have successfully registered")
 
-    st.warning("Please enter your username and password")
+    st.info("Already have an account? Sign in.")
 
 
 
