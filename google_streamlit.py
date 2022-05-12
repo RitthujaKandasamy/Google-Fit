@@ -220,7 +220,7 @@ st.write("##")
 
 with st.sidebar:
     
-    app_mode = option_menu(None, ["Home", "Sign in", "Create an account","Logout "],
+    app_mode = option_menu(None, ["Home", "Sign in", "Create an Account","Logout "],
                         icons=['house', 'person-circle', 'person-plus', 'lock'],
                         menu_icon="app-indicator", default_index=0,
                         styles={
@@ -314,7 +314,7 @@ elif app_mode == 'Sign in':
             else:
                 st.warning("Incorrect Username/Password")
 
-    st.warning("Please enter your username and password")
+    st.info("Don't have an account yet? Sign up")
     
     with left_column:
         st_lottie(lottie_signin, height=300, key="coding")
@@ -341,7 +341,7 @@ elif app_mode == 'Create an account':
         st_lottie(lottie_signup, height=300, key="coding")
 
     with right_column:
-        st.subheader("Create New Account")
+        st.subheader("Create new Account")
         new_username = st.text_input("Username")
         new_password = st.text_input("Password", type="password")
 
