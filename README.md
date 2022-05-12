@@ -73,3 +73,6 @@ Using Graphext explore the followings:
 * Lunch break [13.30-14:00]
 * Focus on the streamlit app [14.00-16:00]
 
+*Ritthu*
+* Streamlit app [11:00-16:00]
+
