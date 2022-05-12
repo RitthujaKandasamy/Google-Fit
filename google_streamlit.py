@@ -147,39 +147,30 @@ def logged_in():
     if option == '💃 aerobics':
          MET = 6.83
          st.write('Your MET is :', MET)
-
     elif option == '📺 watching TV':
          MET = 1
          st.write('Your MET is :', MET)
-
     elif option == '⚾ baseball,softball':
          MET = 5
          st.write('Your MET is :', MET)
-
     elif option == '⛹️ basketball':
          MET = 8
          st.write('Your MET is :', MET)
-
     elif option == '🎱 billiards':
          MET = 2.5
          st.write('Your MET is :', MET)
-
     elif option == '🧍standing':
          MET = 1.5
          st.write('Your MET is :', MET)
-
     elif option == '🚣‍♂️ rowing' :
          MET = 4.64
          st.write('Your MET is :', MET)
-
     elif option == '🚴 cycling':
          MET = 9.5
          st.write('Your MET is :', MET)
-
     elif option == '🕺 dancing':
          MET = 4.5
          st.write('Your MET is :', MET)
-
     elif option == '🎣 fishing':
          MET = 4.5
          st.write('Your MET is :', MET)
@@ -219,7 +210,7 @@ def logged_in():
 
     loss_weight = calories1 / 7700
     st.subheader("\n Your weight loss: {} kg".format(round(loss_weight, 2)))
-
+st.write("##")
 
 
 
@@ -229,8 +220,8 @@ def logged_in():
 
 with st.sidebar:
     
-    app_mode = option_menu(None, ["Home", "Sign in", "Create an account","logout "],
-                        icons=['house', 'person-circle', 'person-plus'],
+    app_mode = option_menu(None, ["Home", "Sign in", "Create an account","Logout "],
+                        icons=['house', 'person-circle', 'person-plus', 'lock'],
                         menu_icon="app-indicator", default_index=0,
                         styles={
         "container": {"padding": "5!important", "background-color": "#f0f2f6"},
@@ -243,13 +234,12 @@ with st.sidebar:
 
 
 
-
 # Home page
 if app_mode == 'Home':
     st.title('**Model for Fitness Software using TMD dataset**')
     
     # Gif from local file
-    file_ = open("Images/gif_test.gif", "rb")
+    file_ = open("C:\\Users\\ritth\\code\\Strive\\Google-Fit\\Images\\gif_test.gif", "rb")
     contents = file_.read()
     data_url = base64.b64encode(contents).decode("utf-8")
     file_.close()
@@ -265,21 +255,21 @@ if app_mode == 'Home':
     st.write("we had given a raw data, with this we need to train our ML models and try to predict outcomes for the user..")
     
     # Team Img
-    st.image("Images/test.PNG", use_column_width = True)
+    #st.image("Images/test.PNG", use_column_width = True)
 
     # First Plot - Missing value
     st.title('**Finding null-values**')
-    st.image("Images/miss_val.jpg", use_column_width = True)
+    #st.image("Images/miss_val.jpg", use_column_width = True)
     st.markdown('ADD A LITTLE DESC')
     
     # Second Plot - Missing value
     st.title('**Target/User**')
-    st.image("Images/compare_user_target.jpg", use_column_width = True)
+    #st.image("Images/compare_user_target.jpg", use_column_width = True)
     st.markdown('u12 and u 6 in test set')
 
     # Third Plot - Conf. Matrix
     st.title('**Confusion Matrix**')
-    st.image("Images/conf_matrix.jpg", use_column_width = True)
+    #st.image("Images/conf_matrix.jpg", use_column_width = True)
     st.markdown('ADD A LITTLE DESC')
 
     # it use to read and upload the file
@@ -310,7 +300,7 @@ elif app_mode == 'Sign in':
 
     with right_column:
         st.subheader("Log in to your account")
-        username = st.text_input("User Name")
+        username = st.text_input("Username")
         password = st.text_input("Password", type="password")
         
         
@@ -340,7 +330,7 @@ elif app_mode == 'Create an account':
     
     HTML_BANNER = """
     <div style="background-color:#464e5f;padding:10px;border-radius:10px">
-    <h1 style="color:white;text-align:center;">Google Fit </h1>
+    <h1 style="color:white;text-align:center;">Reach your Goal 🏋🏃🏊🏻🚵</h1>
     </div>
     """
     stc.html(HTML_BANNER)
@@ -352,7 +342,7 @@ elif app_mode == 'Create an account':
 
     with right_column:
         st.subheader("Create New Account")
-        new_username = st.text_input("User Name")
+        new_username = st.text_input("Username")
         new_password = st.text_input("Password", type="password")
 
         if st.button("Signup", on_click=logged_in):
