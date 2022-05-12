@@ -1,3 +1,4 @@
+from turtle import width
 import streamlit as st
 import pandas as pd
 from streamlit_option_menu import option_menu
@@ -5,6 +6,7 @@ from streamlit_lottie import st_lottie
 import requests
 import sqlite3
 import streamlit.components.v1 as stc
+import base64
 
 
 
@@ -105,8 +107,41 @@ with st.sidebar:
 # Home page
 if app_mode == 'Home':
     st.title('**Model for Fitness Software using TMD dataset**')
-    st.image("Downloads\\fit.jpg", use_column_width = True)
     
+    # Gif from local file
+    file_ = open("Images/gif_test.gif", "rb")
+    contents = file_.read()
+    data_url = base64.b64encode(contents).decode("utf-8")
+    file_.close()
+
+    st.markdown(
+        f'<img src="data:image/gif;base64,{data_url}" alt="test gif">',
+        unsafe_allow_html=True,
+    )
+
+    # Description
+    st.markdown('The Aim is to develop a fitness and user transport mode detection software that is able to be used in plug and play style into most apps and smart watches.')
+    st.markdown('One of the main ideas behind the project is to facilitate the Transport mode detection and calorie counting and make it more precise.')
+    st.write("we had given a raw data, with this we need to train our ML models and try to predict outcomes for the user..")
+    
+    # Team Img
+    st.image("Images/test.PNG", use_column_width = True)
+
+    # First Plot - Missing value
+    st.title('**Finding null-values**')
+    st.image("Images/miss_val.jpg", use_column_width = True)
+    st.markdown('ADD A LITTLE DESC')
+    
+    # Second Plot - Missing value
+    st.title('**Target/User**')
+    st.image("Images/compare_user_target.jpg", use_column_width = True)
+    st.markdown('u12 and u 6 in test set')
+
+    # Third Plot - Conf. Matrix
+    st.title('**Confusion Matrix**')
+    st.image("Images/conf_matrix.jpg", use_column_width = True)
+    st.markdown('ADD A LITTLE DESC')
+
     # it use to read and upload the file
 
 # uploaded_files = st.file_uploader("Choose a CSV file", accept_multiple_files = True)
