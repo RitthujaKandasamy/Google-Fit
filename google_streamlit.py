@@ -78,6 +78,7 @@ def load_lottieurl(url: str):
 
 lottie_signin = load_lottieurl("https://assets9.lottiefiles.com/packages/lf20_mjlh3hcy.json")
 lottie_signup = load_lottieurl("https://assets5.lottiefiles.com/packages/lf20_q5pk6p1k.json")
+lottie_logout = load_lottieurl("https://assets1.lottiefiles.com/private_files/lf30_tapgoijy.json")
 
 
 
@@ -321,3 +322,11 @@ elif app_mode == "LoggedIn":
 
      loss_weight = calories1 / 7700
      st.subheader("\n Your weight loss: {} kg".format(round(loss_weight, 2)))
+
+
+
+
+
+# logout
+else:
+    st_lottie(lottie_logout)
