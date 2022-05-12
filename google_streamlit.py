@@ -4,8 +4,7 @@ from streamlit_lottie import st_lottie
 import requests
 import sqlite3
 import streamlit.components.v1 as stc
-import webbrowser as web
-from untitled import loggedin
+
 
 
 # [theme]                                   # storing in config.toml in streamlit
@@ -83,11 +82,153 @@ lottie_logout = load_lottieurl("https://assets1.lottiefiles.com/private_files/lf
 
 
 
+
+# data information(loggedin)
+if 'count' not in st.session_state:
+    st.session_state.count = 0
+
+def logged_in():
+    st.session_state.count += 1
+    
+     
+    HTML_BANNER = """
+        <div style="background-color:#464e5f;padding:10px;border-radius:10px">
+        <h1 style="color:white;text-align:center;">Google Fit </h1>
+        </div>
+        """
+    stc.html(HTML_BANNER)
+
+     # create new data input 
+    st.subheader("Your weight ")                                            # for weight using session_state
+    def lbs_to_kg():
+         st.session_state.kg = st.session_state.lbs/2.2046
+
+    def kg_to_lbs():
+         st.session_state.lbs = st.session_state.kg*2.2046
+
+    col1, buff, col2 = st.columns([2, 1, 2])
+    with col1:
+         pounds = st.number_input("Pounds:", key= "lbs", on_change= lbs_to_kg)
+    with col2:
+         kilograms = st.number_input("Kilograms:", key= "kg", on_change= kg_to_lbs)
+    
+     
+     
+     # create activate time
+    st.subheader("Time of the activity")
+    def hrs_to_min():
+         st.session_state.min = st.session_state.hrs*60
+
+    def min_to_hrs():
+         st.session_state.hrs = st.session_state.min/60
+
+    col1, buff, col2 = st.columns([2, 1, 2])
+    with col1:
+         hour = st.number_input("Hour:", key= "hrs", on_change= hrs_to_min)
+    with col2:
+         time = st.number_input("Minutes:", key= "min", on_change= min_to_hrs)
+
+    
+
+    # activate selecting
+    st.subheader("Activity")
+    option = st.selectbox(
+     'Activity:',
+     ('💃 aerobics', '📺 watching TV', '⚾ baseball,softball', '⛹️ basketball', '🎱 billiards', 
+     '🚣‍♂️ rowing', '🚴 cycling', '🕺 dancing', '🚘 driving', '🎣 fishing', '🏌️ golfing',
+    '😴 sleeping', '🧍standing', '🏊 swimming', '🚶walking', '🏃 running'))
+
+    st.write('You selected:', option)
+
+
+
+    if option == '💃 aerobics':
+         MET = 6.83
+         st.write('Your MET is :', MET)
+
+    elif option == '📺 watching TV':
+         MET = 1
+         st.write('Your MET is :', MET)
+
+    elif option == '⚾ baseball,softball':
+         MET = 5
+         st.write('Your MET is :', MET)
+
+    elif option == '⛹️ basketball':
+         MET = 8
+         st.write('Your MET is :', MET)
+
+    elif option == '🎱 billiards':
+         MET = 2.5
+         st.write('Your MET is :', MET)
+
+    elif option == '🧍standing':
+         MET = 1.5
+         st.write('Your MET is :', MET)
+
+    elif option == '🚣‍♂️ rowing' :
+         MET = 4.64
+         st.write('Your MET is :', MET)
+
+    elif option == '🚴 cycling':
+         MET = 9.5
+         st.write('Your MET is :', MET)
+
+    elif option == '🕺 dancing':
+         MET = 4.5
+         st.write('Your MET is :', MET)
+
+    elif option == '🎣 fishing':
+         MET = 4.5
+         st.write('Your MET is :', MET)
+    elif option == '🏌️ golfing':
+         MET = 3.75
+         st.write('Your MET is :', MET)
+    elif option == '😴 sleeping':
+         MET = 1
+         st.write('Your MET is :', MET)
+    elif option == '🏊 swimming':
+         MET = 8
+         st.write('Your MET is :', MET)
+    elif option == '🚶walking':
+         MET = 3.8
+         st.write('Your MET is :', MET)
+    elif option == '🚘 driving':
+         MET = 1.3
+         st.write('Your MET is :', MET)
+    elif option == '🏃 running':
+         MET = 9.8
+         st.write('Your MET is :', MET)
+     
+        
+
+    with st.expander("See explanation"):
+          st.write("""
+         Metabolic Equivalent of a Task (MET) – measures how many times more energy an activity burns in comparison to sitting still for the same period of time (MET = 1).
+     """)
+
+
+    # calculation
+    calories = MET * 3.5 * kilograms / 200 
+    st.subheader("\n Calories burned per mintues: {} kcal".format(round(calories, 2)))
+
+    calories1 = calories * time
+    st.subheader("\n Calories burned: {} kcal".format(round(calories1, 2)))
+
+    loss_weight = calories1 / 7700
+    st.subheader("\n Your weight loss: {} kg".format(round(loss_weight, 2)))
+
+
+
+
+
+
 # Menu
+
 with st.sidebar:
     
-    app_mode = option_menu(None, ["Home", "Sign in", "Create an account","LoggedIn","logout "],
-                        icons=['house', 'person-circle', 'person-plus', 'out'],
+    app_mode = option_menu(None, ["Home", "Sign in", "Create an account","logout "],
+                        icons=['house', 'person-circle', 'person-plus'],
                         menu_icon="app-indicator", default_index=0,
                         styles={
         "container": {"padding": "5!important", "background-color": "#f0f2f6"},
@@ -138,15 +279,16 @@ elif app_mode == 'Sign in':
         password = st.text_input("Password", type="password")
         
         
-        if st.button("Login"):
+        if st.button("Login", on_click=logged_in):
             create_usertable()
             result = login_user(username, password)
             
             if result:
                 st.success("You have logged in successfully") 
-                st.session_state = loggedin
+                
             else:
                 st.warning("Incorrect Username/Password")
+
     st.warning("Please enter your username and password")
     
     with left_column:
@@ -178,150 +320,15 @@ elif app_mode == 'Create an account':
         new_username = st.text_input("User Name")
         new_password = st.text_input("Password", type="password")
 
-        if st.button("Signup"):
+        if st.button("Signup", on_click=logged_in):
             create_usertable()
             result1 = add_userdata(new_username, new_password)
             
+            if result1:
+                st.success("You have successfully registered")
 
     st.warning("Please enter your username and password")
 
-
-
-
-
-
-# loggedin data
-# elif app_mode == "LoggedIn":
-     
-#      HTML_BANNER = """
-#     <div style="background-color:#464e5f;padding:10px;border-radius:10px">
-#     <h1 style="color:white;text-align:center;">Google Fit </h1>
-#     </div>
-#     """
-#      stc.html(HTML_BANNER)
-
-#      # create new data input 
-#      st.subheader("Your weight ")                                            # for weight using session_state
-#      def lbs_to_kg():
-#          st.session_state.kg = st.session_state.lbs/2.2046
-
-#      def kg_to_lbs():
-#          st.session_state.lbs = st.session_state.kg*2.2046
-
-#      col1, buff, col2 = st.columns([2, 1, 2])
-#      with col1:
-#          pounds = st.number_input("Pounds:", key= "lbs", on_change= lbs_to_kg)
-#      with col2:
-#          kilograms = st.number_input("Kilograms:", key= "kg", on_change= kg_to_lbs)
-    
-     
-     
-#      # create activate time
-#      st.subheader("Time of the activity")
-#      def hrs_to_min():
-#          st.session_state.min = st.session_state.hrs*60
-
-#      def min_to_hrs():
-#          st.session_state.hrs = st.session_state.min/60
-
-#      col1, buff, col2 = st.columns([2, 1, 2])
-#      with col1:
-#          hour = st.number_input("Hour:", key= "hrs", on_change= hrs_to_min)
-#      with col2:
-#          time = st.number_input("Minutes:", key= "min", on_change= min_to_hrs)
-
-    
-
-#     # activate selecting
-#      st.subheader("Activity")
-#      option = st.selectbox(
-#      'Activity:',
-#      ('💃 aerobics', '📺 watching TV', '⚾ baseball,softball', '⛹️ basketball', '🎱 billiards', 
-#      '🚣‍♂️ rowing', '🚴 cycling', '🕺 dancing', '🚘 driving', '🎣 fishing', '🏌️ golfing',
-#     '😴 sleeping', '🧍standing', '🏊 swimming', '🚶walking', '🏃 running'))
-
-#      st.write('You selected:', option)
-
-
-
-#      if option == '💃 aerobics':
-#          MET = 6.83
-#          st.write('Your MET is :', MET)
-
-#      elif option == '📺 watching TV':
-#          MET = 1
-#          st.write('Your MET is :', MET)
-
-#      elif option == '⚾ baseball,softball':
-#          MET = 5
-#          st.write('Your MET is :', MET)
-
-#      elif option == '⛹️ basketball':
-#          MET = 8
-#          st.write('Your MET is :', MET)
-
-#      elif option == '🎱 billiards':
-#          MET = 2.5
-#          st.write('Your MET is :', MET)
-
-#      elif option == '🧍standing':
-#          MET = 1.5
-#          st.write('Your MET is :', MET)
-
-#      elif option == '🚣‍♂️ rowing' :
-#          MET = 4.64
-#          st.write('Your MET is :', MET)
-
-#      elif option == '🚴 cycling':
-#          MET = 9.5
-#          st.write('Your MET is :', MET)
-
-#      elif option == '🕺 dancing':
-#          MET = 4.5
-#          st.write('Your MET is :', MET)
-
-#      elif option == '🎣 fishing':
-#          MET = 4.5
-#          st.write('Your MET is :', MET)
-#      elif option == '🏌️ golfing':
-#          MET = 3.75
-#          st.write('Your MET is :', MET)
-#      elif option == '😴 sleeping':
-#          MET = 1
-#          st.write('Your MET is :', MET)
-#      elif option == '🏊 swimming':
-#          MET = 8
-#          st.write('Your MET is :', MET)
-#      elif option == '🚶walking':
-#          MET = 3.8
-#          st.write('Your MET is :', MET)
-#      elif option == '🚘 driving':
-#          MET = 1.3
-#          st.write('Your MET is :', MET)
-#      elif option == '🏃 running':
-#          MET = 9.8
-#          st.write('Your MET is :', MET)
-     
-        
-
-#      with st.expander("See explanation"):
-#           st.write("""
-#          Metabolic Equivalent of a Task (MET) – measures how many times more energy an activity burns in comparison to sitting still for the same period of time (MET = 1).
-#      """)
-
-
-
-
-
-#     # calculation
-#      calories = MET * 3.5 * kilograms / 200 
-#      st.subheader("\n Calories burned per mintues: {} kcal".format(round(calories, 2)))
-
-#      calories1 = calories * time
-#      st.subheader("\n Calories burned: {} kcal".format(round(calories1, 2)))
-
-#      loss_weight = calories1 / 7700
-#      st.subheader("\n Your weight loss: {} kg".format(round(loss_weight, 2)))
 
 
 
