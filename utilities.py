@@ -1,6 +1,5 @@
 # Dependencies
-from sklearn.utils._testing import ignore_warnings
-from sklearn.exceptions import ConvergenceWarning
+from tqdm import tqdm
 
 import matplotlib.pyplot as plt
 import pandas as pd
@@ -8,12 +7,11 @@ import numpy as np
 import time
 
 from sklearn.pipeline import Pipeline
-from sklearn.experimental import enable_iterative_imputer
-from sklearn.impute import IterativeImputer
-from sklearn.preprocessing import StandardScaler
+from sklearn.impute import KNNImputer
+from sklearn.preprocessing import StandardScaler, QuantileTransformer
 
 
-from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay
+from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay, balanced_accuracy_score
 from sklearn.model_selection import cross_val_score
 
 
@@ -89,6 +87,19 @@ def split_train_test(data, upper_boundary=1, lower_boundary=3, nb_users_test=3):
     return train.T, test.T
 
 
+def split_train_test2(df, test_users):
+    train = pd.DataFrame()
+    test = pd.DataFrame()
+    for _, row in data.iterrows():
+        if row["user"] in test_users:
+            test = pd.concat([test, row], axis=1)
+
+        else:
+            train = pd.concat([train, row], axis=1)
+
+    return train.T, test.T
+
+
 # Preprocessing + model pipeline
 def pipelines(models):
     """Create pipelines made up preprocessors(Imputer, StandardScaler) and models
@@ -101,7 +112,8 @@ def pipelines(models):
     """
 
     # Preprocessors
-    imputer = IterativeImputer(random_state=0, max_iter=30)
+
+    imputer = KNNImputer()
     scaler = StandardScaler()
 
     # Pipelines of preprocessor(s) and models
@@ -115,7 +127,6 @@ def pipelines(models):
 
 
 # Model performance
-@ignore_warnings(category=ConvergenceWarning)
 def perfomance(pipes, X_train, y_train, X_test, y_test):
     """Compute mean and std of cross validation scores, accuracy on test set
        as well as training and predicting time
@@ -129,7 +140,10 @@ def perfomance(pipes, X_train, y_train, X_test, y_test):
     """
     results = pd.DataFrame()
 
-    for name, model in pipes.items():
+    for i in tqdm(range(len(pipes))):
+
+        name = list(pipes.keys())[i]
+        model = list(pipes.values())[i]
 
         # training time
         t0 = time.time()
@@ -142,13 +156,14 @@ def perfomance(pipes, X_train, y_train, X_test, y_test):
         pred_time = time.time() - t0
 
         # cross validation
-        scores = cross_val_score(model, X_train, y_train)
+        # scores = cross_val_score(model, X_train, y_train)
 
         # append to results
         results = pd.concat([results, pd.DataFrame({'name': [name],
-                                                    'mean_score': [scores.mean()],
-                                                    'std_score':[scores.std()],
+                                                    # 'mean_score': [scores.mean()],
+                                                    # 'std_score':[scores.std()],
                                                     'test_accuracy': [accuracy_score(y_test, preds)],
+                                                    'balanced_accuracy':[balanced_accuracy_score(y_test, preds)],
                                                     'training_time': [train_time],
                                                     'predicting_time': [pred_time]})
                              ])
