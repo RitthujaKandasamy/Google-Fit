@@ -1,9 +1,12 @@
-from turtle import width
 import streamlit as st
+import pandas as pd
+from time import sleep
+from utilities import select_columns
 from streamlit_option_menu import option_menu
 from streamlit_lottie import st_lottie
 import requests
 import sqlite3
+import joblib
 import streamlit.components.v1 as stc
 import base64
 
@@ -36,7 +39,9 @@ def create_usertable():
 
 def add_userdata(username, password):
     info_data.execute('INSERT INTO userstable(username, password) VALUES(?,?)', (username,password))
-conn.commit()
+    conn.commit()
+    x=1
+    return x
 
 def login_user(username,password):
     info_data.execute('SELECT * FROM userstable WHERE username = ? AND password = ?', (username,password))
@@ -85,20 +90,58 @@ lottie_logout = load_lottieurl("https://assets1.lottiefiles.com/private_files/lf
 
 
 
-# data information(loggedin)
-if 'count' not in st.session_state:
-    st.session_state.count = 0
 
 def logged_in():
-    st.session_state.count += 1
-    
-     
-    HTML_BANNER = """
-        <div style="background-color:#464e5f;padding:10px;border-radius:10px">
-        <h1 style="color:white;text-align:center;">Google Fit </h1>
-        </div>
-        """
-    stc.html(HTML_BANNER)
+
+
+    # MODEL INTEGRATION
+
+    # 1. load model
+    model = joblib.load('model.joblib')
+
+    # 2. load data
+    data = pd.read_csv('example_file_user.csv')
+
+    # 3. feature selection
+    keep_columns = 'accelerometer|sound|gyroscope'
+    data = select_columns(data, keep_columns)
+
+    # 4. Prediction
+    col1, buff, col2 = st.columns([2, 1, 2])
+    with col2:
+        demo = st.radio('Prediction demo', ['start', 'stop'], index=1)
+        with col1:
+            for _, row in data.iterrows():
+                if demo == 'start':
+                    placeholder = st.empty()
+                    pred = model.predict(row.values.reshape(1, -1))[0]
+
+                    if pred == 'walking':
+                        placeholder.image(
+                            'Downloads/walking.jpg', use_column_width=True,
+                            caption=pred)
+                        # activities_counts['walking'] += 1
+
+                    elif pred == 'still':
+                        placeholder.image(
+                            'Downloads/standing.jpg', use_column_width=True,
+                            caption=pred)
+
+                        # activities_counts['still'] += 1
+
+                    else:
+                        placeholder.image(
+                            'Downloads/public_transport.jpg', use_column_width=True,
+                            caption=pred)
+                        # activities_counts['bus_car_train'] += 1
+
+                else:
+                    break
+
+                sleep(2)
+                placeholder.empty()
+
+
 
      # create new data input 
     st.subheader("Your weight ")                                            # for weight using session_state
@@ -110,9 +153,9 @@ def logged_in():
 
     col1, buff, col2 = st.columns([2, 1, 2])
     with col1:
-         pounds = st.number_input("Pounds:", key= "lbs", on_change= lbs_to_kg)
+        pounds = st.number_input("Pounds:", key= "lbs", on_change= lbs_to_kg)
     with col2:
-         kilograms = st.number_input("Kilograms:", key= "kg", on_change= kg_to_lbs)
+        kilograms = st.number_input("Kilograms:", key= "kg", on_change= kg_to_lbs)
     
      
      
@@ -126,71 +169,26 @@ def logged_in():
 
     col1, buff, col2 = st.columns([2, 1, 2])
     with col1:
-         hour = st.number_input("Hour:", key= "hrs", on_change= hrs_to_min)
+        hour = st.number_input("Hour:", key= "hrs", on_change= hrs_to_min)
     with col2:
-         time = st.number_input("Minutes:", key= "min", on_change= min_to_hrs)
+        time = st.number_input("Minutes:", key= "min", on_change= min_to_hrs)
 
     
-
+    
     # activate selecting
     st.subheader("Activity")
     option = st.selectbox(
      'Activity:',
-     ('💃 aerobics', '📺 watching TV', '⚾ baseball,softball', '⛹️ basketball', '🎱 billiards', 
-     '🚣‍♂️ rowing', '🚴 cycling', '🕺 dancing', '🚘 driving', '🎣 fishing', '🏌️ golfing',
-    '😴 sleeping', '🧍standing', '🏊 swimming', '🚶walking', '🏃 running'))
+     ('📺 watching TV', '🚘 driving', '🧍standing', '🚶walking'))
 
     st.write('You selected:', option)
 
-
-
-    if option == '💃 aerobics':
-         MET = 6.83
-         st.write('Your MET is :', MET)
-
-    elif option == '📺 watching TV':
+    
+    if option == '📺 watching TV':
          MET = 1
          st.write('Your MET is :', MET)
-
-    elif option == '⚾ baseball,softball':
-         MET = 5
-         st.write('Your MET is :', MET)
-
-    elif option == '⛹️ basketball':
-         MET = 8
-         st.write('Your MET is :', MET)
-
-    elif option == '🎱 billiards':
-         MET = 2.5
-         st.write('Your MET is :', MET)
-
     elif option == '🧍standing':
          MET = 1.5
-         st.write('Your MET is :', MET)
-
-    elif option == '🚣‍♂️ rowing' :
-         MET = 4.64
-         st.write('Your MET is :', MET)
-
-    elif option == '🚴 cycling':
-         MET = 9.5
-         st.write('Your MET is :', MET)
-
-    elif option == '🕺 dancing':
-         MET = 4.5
-         st.write('Your MET is :', MET)
-
-    elif option == '🎣 fishing':
-         MET = 4.5
-         st.write('Your MET is :', MET)
-    elif option == '🏌️ golfing':
-         MET = 3.75
-         st.write('Your MET is :', MET)
-    elif option == '😴 sleeping':
-         MET = 1
-         st.write('Your MET is :', MET)
-    elif option == '🏊 swimming':
-         MET = 8
          st.write('Your MET is :', MET)
     elif option == '🚶walking':
          MET = 3.8
@@ -198,11 +196,7 @@ def logged_in():
     elif option == '🚘 driving':
          MET = 1.3
          st.write('Your MET is :', MET)
-    elif option == '🏃 running':
-         MET = 9.8
-         st.write('Your MET is :', MET)
-     
-        
+       
 
     with st.expander("See explanation"):
           st.write("""
@@ -219,7 +213,7 @@ def logged_in():
 
     loss_weight = calories1 / 7700
     st.subheader("\n Your weight loss: {} kg".format(round(loss_weight, 2)))
-
+     
 
 
 
@@ -229,8 +223,8 @@ def logged_in():
 
 with st.sidebar:
     
-    app_mode = option_menu(None, ["Home", "Sign in", "Create an account","logout "],
-                        icons=['house', 'person-circle', 'person-plus'],
+    app_mode = option_menu(None, ["Home", "Sign in", "Create an Account","Logout"],
+                        icons=['house', 'person-circle', 'person-plus', 'lock'],
                         menu_icon="app-indicator", default_index=0,
                         styles={
         "container": {"padding": "5!important", "background-color": "#f0f2f6"},
@@ -242,14 +236,21 @@ with st.sidebar:
 
 
 
+if 'app_mode' in st.session_state:
+    if app_mode == 'Sign in' or app_mode=='Logged In':
+        app_mode = st.session_state.app_mode
+    else:
+        del st.session_state.app_mode
+
+
 
 
 # Home page
 if app_mode == 'Home':
     st.title('**Model for Fitness Software using TMD dataset**')
-    
+
     # Gif from local file
-    file_ = open("Images/gif_test.gif", "rb")
+    file_ = open("C:\\Users\\ritth\\code\\Strive\\Google-Fit\\Images\\gif_test.gif", "rb")
     contents = file_.read()
     data_url = base64.b64encode(contents).decode("utf-8")
     file_.close()
@@ -265,30 +266,24 @@ if app_mode == 'Home':
     st.write("we had given a raw data, with this we need to train our ML models and try to predict outcomes for the user..")
     
     # Team Img
-    st.image("Images/test.PNG", use_column_width = True)
+    #st.image("Images/test.PNG", use_column_width = True)
 
     # First Plot - Missing value
     st.title('**Finding null-values**')
-    st.image("Images/miss_val.jpg", use_column_width = True)
+    #st.image("Images/miss_val.jpg", use_column_width = True)
     st.markdown('ADD A LITTLE DESC')
     
     # Second Plot - Missing value
     st.title('**Target/User**')
-    st.image("Images/compare_user_target.jpg", use_column_width = True)
+    #st.image("Images/compare_user_target.jpg", use_column_width = True)
     st.markdown('u12 and u 6 in test set')
 
     # Third Plot - Conf. Matrix
     st.title('**Confusion Matrix**')
-    st.image("Images/conf_matrix.jpg", use_column_width = True)
+    #st.image("Images/conf_matrix.jpg", use_column_width = True)
     st.markdown('ADD A LITTLE DESC')
 
-    # it use to read and upload the file
-
-# uploaded_files = st.file_uploader("Choose a CSV file", accept_multiple_files = True)
-# for uploaded_file in uploaded_files:
-#      data = pd.read_csv(uploaded_file)
-#      st.write("filename:", uploaded_file.name)
-#      st.write(data)
+    
 
 
 
@@ -306,41 +301,58 @@ elif app_mode == 'Sign in':
     """
     stc.html(HTML_BANNER)
 
-    left_column, right_column = st.columns(2)               # to get two columns
+    left_column, right_column = st.columns(2)                     # to get two columns
 
     with right_column:
         st.subheader("Log in to your account")
-        username = st.text_input("User Name")
+        username = st.text_input("Username")
         password = st.text_input("Password", type="password")
         
-        
-        if st.button("Login", on_click=logged_in):
+        if st.button("Login"):
             create_usertable()
             result = login_user(username, password)
             
             if result:
-                st.success("You have logged in successfully") 
-                
+                st.success("You have logged in successfully")
+
+                if app_mode not in st.session_state:                  # redirect to logged in page
+                    st.session_state.app_mode = 'Logged In'
+                    st.experimental_rerun()
+
             else:
                 st.warning("Incorrect Username/Password")
 
-    st.warning("Please enter your username and password")
+    st.info("Don't have an account yet? Sign up")
     
     with left_column:
         st_lottie(lottie_signin, height=300, key="coding")
 
 
 
+elif app_mode == 'Logged In':
+    
 
+    # title
+    HTML_BANNER = """
+    <div style="background-color:#464e5f;padding:10px;border-radius:10px">
+    <h1 style="color:white;text-align:center;">Congratulations. You have logged in succesfully. 👋 </h1>
+    </div>
+    """
+    stc.html(HTML_BANNER)
+
+    logged_in()
+
+    
+    
 
 
 
 # create an account
-elif app_mode == 'Create an account':
+elif app_mode == 'Create an Account':
     
     HTML_BANNER = """
     <div style="background-color:#464e5f;padding:10px;border-radius:10px">
-    <h1 style="color:white;text-align:center;">Google Fit </h1>
+    <h1 style="color:white;text-align:center;">Reach your Goal 🏋🏃🏊🏻🚵</h1>
     </div>
     """
     stc.html(HTML_BANNER)
@@ -351,18 +363,23 @@ elif app_mode == 'Create an account':
         st_lottie(lottie_signup, height=300, key="coding")
 
     with right_column:
-        st.subheader("Create New Account")
-        new_username = st.text_input("User Name")
+        st.subheader("Create an Account")
+        new_username = st.text_input("Username")
         new_password = st.text_input("Password", type="password")
 
-        if st.button("Signup", on_click=logged_in):
+        if st.button("Signup"):
             create_usertable()
             result1 = add_userdata(new_username, new_password)
             
             if result1:
                 st.success("You have successfully registered")
 
-    st.warning("Please enter your username and password")
+            else:
+                st.warning("User Registration failed")
+                # ding=view_all_users()
+                # st.write(ding)
+
+    st.info("Already have an account? Sign in.")
 
 
 
