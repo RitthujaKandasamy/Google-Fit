@@ -12,6 +12,7 @@ import base64
 
 
 
+
 # [theme]                                   # storing in config.toml in streamlit
 
 # primaryColor = '#FF4B4B'                  # Primary accent for interactive elements
@@ -23,6 +24,29 @@ import base64
 # # Accepted values (serif | sans serif | monospace)
 # # Default: "sans serif"
 # font = "Serif"
+
+
+
+
+
+
+# calculate calories with data
+def activity_calories(activity, weight, time):
+    # weight in kilogram, time in second
+    # metabolic equivalent of a task. This measure tells you
+    # how many calories you burn per hour of activity, per
+    # one kilogram of body weight
+    # unit of calory burnt is kcal
+
+    if activity == 'walking':
+        MET = 3.8
+        return (time * MET * 3.5 * weight) / (200*60)
+    elif activity == 'still':
+        MET = 1
+        return (time * MET * 3.5 * weight) / (200*60)
+    else:
+        MET = 1.5
+        return (time * MET * 3.5 * weight) / (200*60)
 
 
 
@@ -69,7 +93,9 @@ with st.sidebar:
 
     lottie_url = "https://assets3.lottiefiles.com/packages/lf20_sfpilpqw.json"
     lottie_json = load_lottieurl(lottie_url)
-    st_lottie(lottie_json)
+    st_lottie(lottie_json, height=300)
+
+
 
 
 
@@ -89,7 +115,11 @@ lottie_logout = load_lottieurl("https://assets1.lottiefiles.com/private_files/lf
 
 
 
+
+# logged in app
 def logged_in():
+    st.subheader("Your weight (in kg)")
+    weight = st.number_input('Enter your weight:', 0)
 
 
     # MODEL INTEGRATION
@@ -106,46 +136,73 @@ def logged_in():
     
     # 4. Prediction
     left_column, right_column = st.columns(2) 
-    walk_count, still_count, vehicle_count = 0, 0, 0 
+    col3, col4 = st.columns(2)
+
     with right_column:
         demo = st.radio('Prediction demo', ['start', 'stop'], index=1)
+
+
         with left_column:
+            walk_count, still_count, vehicle_count = 0, 0, 0
+            calories = 0
+
             for _, row in data.iterrows():
                 if demo == 'start':
                     placeholder = st.empty()
+                    placeholder2 = st.empty()
                     pred = model.predict(row.values.reshape(1, -1))[0]
+
 
                     if pred == 'walking':
                         walk_count += 1
+                        time = walk_count * 5
                         placeholder.image(
-                            'Downloads\\walking.jpg', use_column_width=True,
-                            caption=pred)
-                        
+                            'Downloads\\walking.jpg', use_column_width=True)
+
+                        sleep(2)
+                        placeholder.empty()
+
 
                     elif pred == 'still':
                         still_count += 1
+                        time = still_count * 5
                         placeholder.image(
-                            'Downloads\\standing.jpg', use_column_width=True,
-                            caption=pred)
+                            'Downloads\\standing.jpg', use_column_width=True)
+
+                        sleep(2)
+                        placeholder.empty()    
 
                         
 
                     else:
                         vehicle_count += 1
+                        time = vehicle_count * 5
                         placeholder.image(
-                            'Downloads\\public_transport.jpg', use_column_width=True,
-                            caption=pred)
+                            'Downloads\\public_transport.jpg', use_column_width=True)
+
+                        sleep(2)
+                        placeholder.empty()
+
                         
 
                 else:
                     break
 
-                sleep(2)
-                placeholder.empty()
-                st.write('W: ', walk_count, 'S:', still_count, 'V:', vehicle_count)
+                with col3:
+                    
+                    calories += activity_calories(pred, weight, time)
+                    placeholder2.subheader(
+                        f'You burnt {round(calories, 3)} kcal in total')
+
+                    sleep(2)
+                    placeholder2.empty()
+
+
+
 
 
      # create new data input 
+    st.title("Planning")
     st.subheader("Your weight ")                                            # for weight using session_state
     def lbs_to_kg():
          st.session_state.kg = st.session_state.lbs/2.2046
@@ -162,7 +219,7 @@ def logged_in():
      
      
      # create activate time
-    st.subheader("Time of the activity")
+    st.subheader("Duration of the activity")
     def hrs_to_min():
          st.session_state.min = st.session_state.hrs*60
 
@@ -180,7 +237,7 @@ def logged_in():
     # activate selecting
     st.subheader("Activity")
     option = st.selectbox(
-     'Activity:',
+     'Select your activity:',
      ('🚉 public transport', '🧍standing', '🚶walking'))
 
     st.write('You selected:', option)
@@ -222,7 +279,7 @@ def logged_in():
 
 with st.sidebar:
     
-    app_mode = option_menu(None, ["Home", "Sign in", "Create an Account","Logout"],
+    app_mode = option_menu(None, ["Home", "Sign in", "Create an Account", "Logout"],
                         icons=['house', 'person-circle', 'person-plus', 'lock'],
                         menu_icon="app-indicator", default_index=0,
                         styles={
@@ -247,6 +304,7 @@ if 'app_mode' in st.session_state:
 # Home page
 if app_mode == 'Home':
     st.title('**Fitness Software using TMD dataset**')
+    st.write("##")
 
     # Gif from local file
     file_ = open("C:\\Users\\ritth\\code\\Strive\\Google-Fit\\images\\gif_test.gif", "rb")
@@ -277,16 +335,22 @@ if app_mode == 'Home':
     st.image("Downloads\\miss_val.jpg", use_column_width = True)
     with st.expander('See explanation'):
          st.write('The white part on the plot represent the missing values.')
+    st.write("##")
+
     
     # Second Plot - Missing value
     st.subheader('**Target/User**')
     st.image("Downloads\\user_target.jpg", use_column_width = True)
     with st.expander('See explanation'):
          st.write('We compared Target and User, we decided to take the U12 and U6 for the test set.')
+    st.write("##")
+
 
     # Third Plot - Conf. Matrix
     st.subheader('**Confusion Matrix**')
+    #st.image("Downloads\\Table_ConfusionMatrix_rsz.png", use_column_width = True)
     st.image("Downloads\\conf_matrix_new.jpg", use_column_width = True)
+    st.image("Downloads\\Table_ConfusionMatrix_rsz.png", use_column_width = True)
     with st.expander('See explanation'):
          st.write('In the Confusion Matrix we compared people who are walking, still or in a bus/car/train.')
 
@@ -332,7 +396,7 @@ elif app_mode == 'Sign in':
     st.info("Don't have an account yet? Sign up")
     
     with left_column:
-        st_lottie(lottie_signin, height=300, key="coding")
+        st_lottie(lottie_signin, height=300)
 
 
 
@@ -342,7 +406,7 @@ elif app_mode == 'Logged In':
     # title
     HTML_BANNER = """
     <div style="background-color:#464e5f;padding:10px;border-radius:10px">
-    <h1 style="color:white;text-align:center;">Congratulations. You have logged in succesfully. 👋 </h1>
+    <h1 style="color:white;text-align:center;">Fitness is our Dream 💭 </h1>
     </div>
     """
     stc.html(HTML_BANNER)
@@ -367,7 +431,7 @@ elif app_mode == 'Create an Account':
     left_column, right_column = st.columns(2)               # to get two columns
 
     with left_column:
-        st_lottie(lottie_signup, height=300, key="coding")
+        st_lottie(lottie_signup, height=300)
 
     with right_column:
         st.subheader("Create an Account")
