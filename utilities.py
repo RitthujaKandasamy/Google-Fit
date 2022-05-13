@@ -11,7 +11,7 @@ from sklearn.impute import KNNImputer
 from sklearn.preprocessing import StandardScaler, QuantileTransformer
 
 
-from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay, balanced_accuracy_score
+from sklearn.metrics import accuracy_score, ConfusionMatrixDisplay, balanced_accuracy_score, f1_score, recall_score, precision_score
 from sklearn.model_selection import cross_val_score
 
 
@@ -90,7 +90,7 @@ def split_train_test(data, upper_boundary=1, lower_boundary=3, nb_users_test=3):
 def split_train_test2(df, test_users):
     train = pd.DataFrame()
     test = pd.DataFrame()
-    for _, row in data.iterrows():
+    for _, row in df.iterrows():
         if row["user"] in test_users:
             test = pd.concat([test, row], axis=1)
 
@@ -112,14 +112,17 @@ def pipelines(models):
     """
 
     # Preprocessors
-
+    # imputer = IterativeImputer(random_state=0, max_iter=30)
     imputer = KNNImputer()
+    # imputer = SimpleImputer(strategy='median')
     scaler = StandardScaler()
+    qtransf = QuantileTransformer(output_distribution='normal')
 
     # Pipelines of preprocessor(s) and models
     pipes = {name: Pipeline([
         ('imputer', imputer),
         ('scaler', scaler),
+        ('qtransf', qtransf),
         ('model', model)
     ]) for name, model in models.items()}
 
@@ -162,10 +165,13 @@ def perfomance(pipes, X_train, y_train, X_test, y_test):
         results = pd.concat([results, pd.DataFrame({'name': [name],
                                                     # 'mean_score': [scores.mean()],
                                                     # 'std_score':[scores.std()],
-                                                    'test_accuracy': [accuracy_score(y_test, preds)],
+                                                    # 'test_accuracy': [accuracy_score(y_test, preds)],
                                                     'balanced_accuracy':[balanced_accuracy_score(y_test, preds)],
+                                                    'f1_score': [f1_score(y_test, preds)],
+                                                    'precision': [precision_score(y_test, preds)],
+                                                    'recall': [recall_score(y_test, preds)],
                                                     'training_time': [train_time],
                                                     'predicting_time': [pred_time]})
                              ])
 
-    return results.sort_values(by='test_accuracy', ascending=False)
+    return results.sort_values(by='balanced_accuracy', ascending=False)
