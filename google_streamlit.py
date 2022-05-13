@@ -120,11 +120,7 @@ def logged_in():
                         placeholder.image(
                             'Downloads\\walking.jpg', use_column_width=True,
                             caption=pred)
-<<<<<<< Updated upstream
-                         
-=======
                         
->>>>>>> Stashed changes
 
                     elif pred == 'still':
                         still_count += 1
@@ -132,22 +128,14 @@ def logged_in():
                             'Downloads\\standing.jpg', use_column_width=True,
                             caption=pred)
 
-<<<<<<< Updated upstream
-            
-=======
                         
->>>>>>> Stashed changes
 
                     else:
                         vehicle_count += 1
                         placeholder.image(
                             'Downloads\\public_transport.jpg', use_column_width=True,
                             caption=pred)
-<<<<<<< Updated upstream
-                    
-=======
                         
->>>>>>> Stashed changes
 
                 else:
                     break
@@ -193,20 +181,12 @@ def logged_in():
     st.subheader("Activity")
     option = st.selectbox(
      'Activity:',
-<<<<<<< Updated upstream
      ('🚉 public transport', '🧍standing', '🚶walking'))
-=======
-     ('🚘 public transport', '🧍standing', '🚶walking'))
->>>>>>> Stashed changes
 
     st.write('You selected:', option)
 
     
-<<<<<<< Updated upstream
     if option == '🚉 public transport':
-=======
-    if option == '🚘 public transport':
->>>>>>> Stashed changes
          MET = 1
          st.write('Your MET is :', MET)
     elif option == '🧍standing':
@@ -215,14 +195,7 @@ def logged_in():
     elif option == '🚶walking':
          MET = 3.8
          st.write('Your MET is :', MET)
-<<<<<<< Updated upstream
-    # elif option == '🚉 driving':
-    #      MET = 1.3
-    #      st.write('Your MET is :', MET)
-       
-=======
     
->>>>>>> Stashed changes
 
     with st.expander("See explanation"):
           st.write("""
@@ -274,15 +247,9 @@ if 'app_mode' in st.session_state:
 # Home page
 if app_mode == 'Home':
     st.title('**Fitness Software using TMD dataset**')
-<<<<<<< Updated upstream
 
     # Gif from local file
     file_ = open("C:\\Users\\ritth\\code\\Strive\\Google-Fit\\images\\gif_test.gif", "rb")
-=======
-    
-    # Gif from local file
-    file_ = open("Downloads\\gif_test.gif", "rb")
->>>>>>> Stashed changes
     contents = file_.read()
     data_url = base64.b64encode(contents).decode("utf-8")
     file_.close()
@@ -298,10 +265,7 @@ if app_mode == 'Home':
     st.markdown('The main goal is to develop a fitness and user transport mode detection software able to be used in plug and play style into most apps and smart watches.')
     st.markdown('One of the main ideas behind the project is to facilitate the transport mode detection and calories counting, making it more precise.')
     st.markdown("Raw data was given to us in order to train our ML models and try to predict outcomes for the user.")
-<<<<<<< Updated upstream
     
-=======
->>>>>>> Stashed changes
     
     # Team Img
     st.title('**Our Team**')
@@ -311,34 +275,22 @@ if app_mode == 'Home':
     st.title('**Some results**')
     st.subheader('**Check null-values**')
     st.image("Downloads\\miss_val.jpg", use_column_width = True)
-<<<<<<< Updated upstream
     with st.expander('See explanation'):
          st.write('The white part on the plot represent the missing values.')
-=======
-    st.markdown('The white part on the plot rappresent the missing values')
->>>>>>> Stashed changes
     
     # Second Plot - Missing value
     st.subheader('**Target/User**')
     st.image("Downloads\\user_target.jpg", use_column_width = True)
-<<<<<<< Updated upstream
     with st.expander('See explanation'):
          st.write('We compared Target and User, we decided to take the U12 and U6 for the test set.')
-=======
-    st.markdown('We compared Target and User, we decided to take the U12 and u6 for the test set')
->>>>>>> Stashed changes
 
     # Third Plot - Conf. Matrix
     st.subheader('**Confusion Matrix**')
     st.image("Downloads\\conf_matrix_new.jpg", use_column_width = True)
-<<<<<<< Updated upstream
     with st.expander('See explanation'):
          st.write('In the Confusion Matrix we compared people who are walking, still or in a bus/car/train.')
 
     
-=======
-    st.markdown('In the confusion Matrix we compared people that are walking, still or in a bus/car/train')
->>>>>>> Stashed changes
 
 
 
