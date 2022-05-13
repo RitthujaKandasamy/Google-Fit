@@ -106,7 +106,7 @@ with st.sidebar:
 
 # Home page
 if app_mode == 'Home':
-    st.title('**Model for Fitness Software using TMD dataset**')
+    st.title('**Fitness Software using TMD dataset**')
     
     # Gif from local file
     file_ = open("Images/gif_test.gif", "rb")
@@ -120,27 +120,31 @@ if app_mode == 'Home':
     )
 
     # Description
-    st.markdown('The Aim is to develop a fitness and user transport mode detection software that is able to be used in plug and play style into most apps and smart watches.')
-    st.markdown('One of the main ideas behind the project is to facilitate the Transport mode detection and calorie counting and make it more precise.')
-    st.write("we had given a raw data, with this we need to train our ML models and try to predict outcomes for the user..")
+    st.markdown('\n')
+    st.markdown('\n')
+    st.markdown('The main goal is to develop a fitness and user transport mode detection software able to be used in plug and play style into most apps and smart watches.')
+    st.markdown('One of the main ideas behind the project is to facilitate the transport mode detection and calories counting, making it more precise.')
+    st.markdown("Raw data was given to us in order to train our ML models and try to predict outcomes for the user.")
     
     # Team Img
-    st.image("Images/test.PNG", use_column_width = True)
+    st.title('**Our Team**')
+    st.image("Images/Our_Team.PNG", use_column_width = True)
 
     # First Plot - Missing value
-    st.title('**Finding null-values**')
+    st.title('**Some results**')
+    st.subheader('**Check null-values**')
     st.image("Images/miss_val.jpg", use_column_width = True)
-    st.markdown('ADD A LITTLE DESC')
+    st.markdown('The white part on the plot rappresent the missing values')
     
     # Second Plot - Missing value
-    st.title('**Target/User**')
-    st.image("Images/compare_user_target.jpg", use_column_width = True)
-    st.markdown('u12 and u 6 in test set')
+    st.subheader('**Target/User**')
+    st.image("Images/user_target.jpg", use_column_width = True)
+    st.markdown('We compared Target and User, we decided to take the U12 and u6 for the test set')
 
     # Third Plot - Conf. Matrix
-    st.title('**Confusion Matrix**')
-    st.image("Images/conf_matrix.jpg", use_column_width = True)
-    st.markdown('ADD A LITTLE DESC')
+    st.subheader('**Confusion Matrix**')
+    st.image("Images/conf_matrix_new.jpg", use_column_width = True)
+    st.markdown('In the confusion Matrix we compared people that are walking, still or in a bus/car/train')
 
     # it use to read and upload the file
 
