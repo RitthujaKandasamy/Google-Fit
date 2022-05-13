@@ -89,58 +89,60 @@ lottie_logout = load_lottieurl("https://assets1.lottiefiles.com/private_files/lf
 
 
 
-
-
 def logged_in():
 
 
     # MODEL INTEGRATION
 
     # 1. load model
-    model = joblib.load('model.joblib')
+    model = joblib.load('C:\\Users\\ritth\\code\\Strive\\Google-Fit\\theo.joblib')
 
     # 2. load data
-    data = pd.read_csv('example_file_user.csv')
+    data = pd.read_csv('C:\\Users\\ritth\\code\\Strive\\Google-Fit\\example_file_user.csv')
 
     # 3. feature selection
     keep_columns = 'accelerometer|sound|gyroscope'
     data = select_columns(data, keep_columns)
-
+    
     # 4. Prediction
-    col1, buff, col2 = st.columns([2, 1, 2])
-    with col2:
+    left_column, right_column = st.columns(2) 
+    walk_count, still_count, vehicle_count = 0, 0, 0 
+    with right_column:
         demo = st.radio('Prediction demo', ['start', 'stop'], index=1)
-        with col1:
+        with left_column:
             for _, row in data.iterrows():
                 if demo == 'start':
                     placeholder = st.empty()
                     pred = model.predict(row.values.reshape(1, -1))[0]
 
                     if pred == 'walking':
+                        walk_count += 1
                         placeholder.image(
-                            'Downloads/walking.jpg', use_column_width=True,
+                            'Downloads\\walking.jpg', use_column_width=True,
                             caption=pred)
-                        # activities_counts['walking'] += 1
+                        
 
                     elif pred == 'still':
+                        still_count += 1
                         placeholder.image(
-                            'Downloads/standing.jpg', use_column_width=True,
+                            'Downloads\\standing.jpg', use_column_width=True,
                             caption=pred)
 
-                        # activities_counts['still'] += 1
+                        
 
                     else:
+                        vehicle_count += 1
                         placeholder.image(
-                            'Downloads/public_transport.jpg', use_column_width=True,
+                            'Downloads\\public_transport.jpg', use_column_width=True,
                             caption=pred)
-                        # activities_counts['bus_car_train'] += 1
+                        
 
                 else:
                     break
 
                 sleep(2)
                 placeholder.empty()
-
+                st.write('W: ', walk_count, 'S:', still_count, 'V:', vehicle_count)
 
 
      # create new data input 
@@ -179,12 +181,12 @@ def logged_in():
     st.subheader("Activity")
     option = st.selectbox(
      'Activity:',
-     ('📺 watching TV', '🚘 driving', '🧍standing', '🚶walking'))
+     ('🚉 public transport', '🧍standing', '🚶walking'))
 
     st.write('You selected:', option)
 
     
-    if option == '📺 watching TV':
+    if option == '🚉 public transport':
          MET = 1
          st.write('Your MET is :', MET)
     elif option == '🧍standing':
@@ -193,10 +195,7 @@ def logged_in():
     elif option == '🚶walking':
          MET = 3.8
          st.write('Your MET is :', MET)
-    elif option == '🚘 driving':
-         MET = 1.3
-         st.write('Your MET is :', MET)
-       
+    
 
     with st.expander("See explanation"):
           st.write("""
@@ -247,10 +246,10 @@ if 'app_mode' in st.session_state:
 
 # Home page
 if app_mode == 'Home':
-    st.title('**Model for Fitness Software using TMD dataset**')
+    st.title('**Fitness Software using TMD dataset**')
 
     # Gif from local file
-    file_ = open("C:\\Users\\ritth\\code\\Strive\\Google-Fit\\Images\\gif_test.gif", "rb")
+    file_ = open("C:\\Users\\ritth\\code\\Strive\\Google-Fit\\images\\gif_test.gif", "rb")
     contents = file_.read()
     data_url = base64.b64encode(contents).decode("utf-8")
     file_.close()
@@ -261,27 +260,35 @@ if app_mode == 'Home':
     )
 
     # Description
-    st.markdown('The Aim is to develop a fitness and user transport mode detection software that is able to be used in plug and play style into most apps and smart watches.')
-    st.markdown('One of the main ideas behind the project is to facilitate the Transport mode detection and calorie counting and make it more precise.')
-    st.write("we had given a raw data, with this we need to train our ML models and try to predict outcomes for the user..")
+    st.markdown('\n')
+    st.markdown('\n')
+    st.markdown('The main goal is to develop a fitness and user transport mode detection software able to be used in plug and play style into most apps and smart watches.')
+    st.markdown('One of the main ideas behind the project is to facilitate the transport mode detection and calories counting, making it more precise.')
+    st.markdown("Raw data was given to us in order to train our ML models and try to predict outcomes for the user.")
+    
     
     # Team Img
-    #st.image("Images/test.PNG", use_column_width = True)
+    st.title('**Our Team**')
+    st.image("Downloads\\Our_Team.PNG", use_column_width = True)
 
     # First Plot - Missing value
-    st.title('**Finding null-values**')
-    #st.image("Images/miss_val.jpg", use_column_width = True)
-    st.markdown('ADD A LITTLE DESC')
+    st.title('**Some results**')
+    st.subheader('**Check null-values**')
+    st.image("Downloads\\miss_val.jpg", use_column_width = True)
+    with st.expander('See explanation'):
+         st.write('The white part on the plot represent the missing values.')
     
     # Second Plot - Missing value
-    st.title('**Target/User**')
-    #st.image("Images/compare_user_target.jpg", use_column_width = True)
-    st.markdown('u12 and u 6 in test set')
+    st.subheader('**Target/User**')
+    st.image("Downloads\\user_target.jpg", use_column_width = True)
+    with st.expander('See explanation'):
+         st.write('We compared Target and User, we decided to take the U12 and U6 for the test set.')
 
     # Third Plot - Conf. Matrix
-    st.title('**Confusion Matrix**')
-    #st.image("Images/conf_matrix.jpg", use_column_width = True)
-    st.markdown('ADD A LITTLE DESC')
+    st.subheader('**Confusion Matrix**')
+    st.image("Downloads\\conf_matrix_new.jpg", use_column_width = True)
+    with st.expander('See explanation'):
+         st.write('In the Confusion Matrix we compared people who are walking, still or in a bus/car/train.')
 
     
 
