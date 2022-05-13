@@ -144,6 +144,7 @@ if app_mode == 'Home':
     # Third Plot - Conf. Matrix
     st.subheader('**Confusion Matrix**')
     st.image("Images/conf_matrix_new.jpg", use_column_width = True)
+    st.image("Images/Table_ConfusionMatrix_rsz.png", use_column_width = True)
     st.markdown('In the confusion Matrix we compared people that are walking, still or in a bus/car/train')
 
     # it use to read and upload the file
