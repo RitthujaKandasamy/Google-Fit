@@ -93,7 +93,7 @@ with st.sidebar:
 
     lottie_url = "https://assets3.lottiefiles.com/packages/lf20_sfpilpqw.json"
     lottie_json = load_lottieurl(lottie_url)
-    st_lottie(lottie_json)
+    st_lottie(lottie_json, height=300)
 
 
 
@@ -202,6 +202,7 @@ def logged_in():
 
 
      # create new data input 
+    st.title("Planning")
     st.subheader("Your weight ")                                            # for weight using session_state
     def lbs_to_kg():
          st.session_state.kg = st.session_state.lbs/2.2046
@@ -395,7 +396,7 @@ elif app_mode == 'Sign in':
     st.info("Don't have an account yet? Sign up")
     
     with left_column:
-        st_lottie(lottie_signin, height=300, key="coding")
+        st_lottie(lottie_signin, height=300)
 
 
 
@@ -430,7 +431,7 @@ elif app_mode == 'Create an Account':
     left_column, right_column = st.columns(2)               # to get two columns
 
     with left_column:
-        st_lottie(lottie_signup, height=300, key="coding")
+        st_lottie(lottie_signup, height=300)
 
     with right_column:
         st.subheader("Create an Account")
