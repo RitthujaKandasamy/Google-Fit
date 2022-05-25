@@ -54,7 +54,7 @@ def activity_calories(activity, weight, time):
 
 
 # DB Management, to store data
-conn = sqlite3.connect('data.db')
+conn = sqlite3.connect('data.db')             # create excel table to store data
 info_data = conn.cursor()
 
 
@@ -64,12 +64,12 @@ def create_usertable():
 def add_userdata(username, password):
     info_data.execute('INSERT INTO userstable(username, password) VALUES(?,?)', (username,password))
     conn.commit()
-    x=1
-    return x
+    # x=1
+    # return x
 
 def login_user(username,password):
     info_data.execute('SELECT * FROM userstable WHERE username = ? AND password = ?', (username,password))
-    data = info_data.fetchall()
+    data = info_data.fetchall()              # select only the row we given
     return data
 
 
